@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html,body{margin:0;height:100%;background:#DCE9F4;overflow:hidden;font-family:'JetBrains Mono',ui-monospace,monospace;}
+  svg{display:block;width:100%;height:100%;}
+  .lbl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;fill:#41586E;pointer-events:none;transition:fill .3s ease;}
+  .dot{transition:r .3s cubic-bezier(.2,.8,.2,1);}
+  .ring{transform-box:fill-box;transform-origin:center;animation:pr 2.8s ease-out infinite;}
+  @keyframes pr{0%{transform:scale(1);opacity:.5;}70%{transform:scale(3);opacity:0;}100%{transform:scale(3);opacity:0;}}
+</style>
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+</head>
+<body>
+<svg id="m"></svg>
+<script>
+const CITIES = [
+  { k: 'Sydney', c: [151.209, -33.868] },
+  { k: 'Newcastle', c: [151.784, -32.927] },
+  { k: 'Central Coast', c: [151.343, -33.428] },
+  { k: 'Wollongong', c: [150.894, -34.425] },
+  { k: 'Regional', c: [148.601, -32.257] }
+];
+const VIEW = { type: 'Polygon', coordinates: [[[146.4, -28.4], [154.6, -28.4], [154.6, -37.4], [146.4, -37.4], [146.4, -28.4]]] };
+let land = null, active = '', lastW = 0, lastH = 0, pending = false;
+const nodes = {};
+
+function paint(w, h) {
+  const svg = d3.select('#m').attr('viewBox', '0 0 ' + w + ' ' + h);
+  svg.selectAll('*').remove();
+  Object.keys(nodes).forEach(function (k) { delete nodes[k]; });
+
+  const proj = d3.geoMercator().fitExtent([[0, 0], [w, h]], VIEW);
+  const path = d3.geoPath(proj);
+
+  const defs = svg.append('defs');
+  const g1 = defs.append('linearGradient').attr('id', 'sea').attr('x1', '0').attr('y1', '0').attr('x2', '1').attr('y2', '1');
+  g1.append('stop').attr('offset', '0%').attr('stop-color', '#E9F1F9');
+  g1.append('stop').attr('offset', '100%').attr('stop-color', '#D3E3F1');
+  const g2 = defs.append('linearGradient').attr('id', 'terra').attr('x1', '0').attr('y1', '0').attr('x2', '0').attr('y2', '1');
+  g2.append('stop').attr('offset', '0%').attr('stop-color', '#FFFFFF');
+  g2.append('stop').attr('offset', '100%').attr('stop-color', '#F1F5F9');
+
+  svg.append('rect').attr('width', w).attr('height', h).attr('fill', 'url(#sea)');
+  svg.append('path').datum(d3.geoGraticule().step([2, 2])()).attr('d', path)
+    .attr('fill', 'none').attr('stroke', '#08243C').attr('stroke-width', 0.5).attr('opacity', 0.07);
+  svg.append('path').datum(land).attr('d', path).attr('fill', 'url(#terra)')
+    .attr('stroke', '#B9CBDC').attr('stroke-width', 1);
+
+  const g = svg.append('g');
+  CITIES.forEach(function (c) {
+    const p = proj(c.c);
+    if (!p) return;
+    const node = g.append('g').attr('transform', 'translate(' + p[0] + ',' + p[1] + ')');
+    const ring = node.append('circle').attr('class', 'ring').attr('r', 6).attr('fill', '#F7A823').attr('opacity', 0.3);
+    const dot = node.append('circle').attr('class', 'dot').attr('r', 5).attr('fill', '#F7A823').attr('stroke', '#fff').attr('stroke-width', 2);
+    const txt = node.append('text').attr('class', 'lbl').attr('x', 14).attr('y', 4).text(c.k);
+    nodes[c.k] = { ring: ring, dot: dot, txt: txt };
+  });
+  applyActive();
+}
+
+function applyActive() {
+  Object.keys(nodes).forEach(function (k) {
+    const on = k === active, n = nodes[k];
+    n.dot.attr('r', on ? 8 : 5);
+    n.ring.attr('opacity', on ? 0.55 : 0.3);
+    n.txt.attr('fill', on ? '#08243C' : '#41586E');
+  });
+}
+
+function measure() {
+  if (!land || pending) return;
+  pending = true;
+  requestAnimationFrame(function () {
+    pending = false;
+    const w = Math.round(document.documentElement.clientWidth);
+    const h = Math.round(document.documentElement.clientHeight);
+    if (!w || !h) return;
+    if (Math.abs(w - lastW) < 2 && Math.abs(h - lastH) < 2) return;
+    lastW = w; lastH = h;
+    paint(w, h);
+  });
+}
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(function (topo) {
+  land = topojson.feature(topo, topo.objects.countries);
+  measure();
+});
+
+let rt = null;
+window.addEventListener('resize', function () {
+  clearTimeout(rt);
+  rt = setTimeout(measure, 160);
+});
+
+window.addEventListener('message', function (e) {
+  const d = e.data || {};
+  if (d.type !== 'region') return;
+  const name = d.name || '';
+  if (name === active) return;
+  active = name;
+  if (land && lastW) applyActive();
+});
+</script>
+</body>
+</html>
