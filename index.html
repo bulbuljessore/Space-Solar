@@ -36,7 +36,12 @@
 
   <div style="background:#08243C;color:#93AAC0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase">
     <div style="max-width:1280px;margin:0 auto;padding:9px clamp(20px,5vw,64px);display:flex;align-items:center;justify-content:space-between;gap:16px">
-      <span>Solar design, installation &amp; service across NSW</span>
+      <sc-if value="{{ notTiny }}" hint-placeholder-val="{{ true }}">
+        <span>Solar design, installation &amp; service across NSW</span>
+      </sc-if>
+      <sc-if value="{{ tiny }}" hint-placeholder-val="{{ false }}">
+        <span>Solar across NSW</span>
+      </sc-if>
       <a href="tel:1300713998" style="color:#F7A823" style-hover="color:#FFC258">1300 713 998</a>
     </div>
   </div>
@@ -72,7 +77,7 @@
   </header>
 
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;inset:0;z-index:120;background:#08243C;color:#fff;padding:24px clamp(20px,6vw,48px);display:flex;flex-direction:column">
+    <div style="position:fixed;inset:0;z-index:120;background:#08243C;color:#fff;padding:24px clamp(20px,6vw,48px);display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch">
       <div style="display:flex;align-items:center;justify-content:space-between;height:50px">
         <span style="background:#fff;border-radius:10px;padding:7px 12px;display:inline-flex"><img src="uploads/pasted-1785142002664-0.png" alt="Space Solar" style="height:26px;width:auto;display:block" /></span>
         <button onClick="{{ toggleMenu }}" aria-label="Close" style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:transparent;color:#fff;font-size:20px;cursor:pointer">&times;</button>
@@ -226,7 +231,7 @@
       </div>
     </div>
     <div style="position:relative;border-top:1px solid rgba(255,255,255,.12);background:rgba(6,26,44,.72);backdrop-filter:blur(10px)">
-      <div style="max-width:1280px;margin:0 auto;padding:22px clamp(20px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:22px">
+      <div style="max-width:1280px;margin:0 auto;padding:22px clamp(20px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));gap:22px">
         <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
           <div style="display:flex;flex-direction:column;gap:6px">
             <span style="font-size:clamp(22px,2.4vw,28px);font-weight:600;letter-spacing:-.03em;color:#fff"><span data-count="{{ s.value }}" data-plain="{{ s.plain }}">0</span>{{ s.suffix }}</span>
@@ -377,7 +382,7 @@
         <h2 data-reveal style="font-size:clamp(28px,3.8vw,48px);line-height:1.08;letter-spacing:-.03em;font-weight:600;margin:0;max-width:20ch;text-wrap:balance">Show the work. Explain the system. Keep the records.</h2>
       </div>
     </div>
-    <div style="max-width:1280px;margin:0 auto;padding:clamp(44px,5vw,72px) clamp(20px,5vw,64px) clamp(64px,9vw,110px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(28px,3.5vw,56px)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(44px,5vw,72px) clamp(20px,5vw,64px) clamp(64px,9vw,110px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(28px,3.5vw,56px)">
       <div>
         <p data-reveal style="margin:0;font-size:17px;line-height:1.68;color:#4B6379;max-width:42ch;text-wrap:pretty">Every completed job is logged in our installation library. If you sell the property, the next owner gets the same file.</p>
         <a data-reveal href="#quote" onClick="{{ goQuote }}" style="display:inline-block;margin-top:26px;font-size:15px;font-weight:500;color:#08243C;border-bottom:1px solid rgba(8,36,60,.25);padding-bottom:4px" style-hover="border-color:#F7A823;color:#1B6FB5">Ask for a project reference &rarr;</a>
@@ -394,7 +399,7 @@
   </section>
 
   <section id="support" style="background:#fff;border-top:1px solid #E7ECF2">
-    <div style="max-width:1280px;margin:0 auto;padding:clamp(64px,9vw,124px) clamp(20px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(34px,4vw,64px);align-items:start">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(64px,9vw,124px) clamp(20px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(34px,4vw,64px);align-items:start">
       <div>
         <p data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#1B6FB5;margin:0 0 18px">Warranty &amp; aftercare</p>
         <h2 data-reveal style="font-size:clamp(30px,4vw,48px);line-height:1.07;letter-spacing:-.03em;font-weight:600;margin:0 0 22px;max-width:17ch;text-wrap:balance;color:#08243C">A clear path when something needs attention.</h2>
@@ -431,7 +436,7 @@
 
   <section id="reviews" style="background:#F5F7FA">
     <div style="max-width:1280px;margin:0 auto;padding:clamp(64px,9vw,110px) clamp(20px,5vw,64px)">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(28px,3.5vw,56px);align-items:center">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(28px,3.5vw,56px);align-items:center">
         <div>
           <p data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#1B6FB5;margin:0 0 18px">Verified feedback</p>
           <h2 data-reveal style="font-size:clamp(28px,3.6vw,44px);line-height:1.08;letter-spacing:-.03em;font-weight:600;margin:0 0 20px;max-width:20ch;text-wrap:balance;color:#08243C">Reviews with a source, a date and a job number.</h2>
@@ -467,7 +472,7 @@
   </section>
 
   <section id="coverage" style="background:#fff;border-top:1px solid #E7ECF2">
-    <div style="max-width:1280px;margin:0 auto;padding:clamp(64px,9vw,124px) clamp(20px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(32px,4vw,64px);align-items:center">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(64px,9vw,124px) clamp(20px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(32px,4vw,64px);align-items:center">
       <div>
         <p data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#1B6FB5;margin:0 0 18px">Where our crews work</p>
         <h2 data-reveal style="font-size:clamp(30px,4vw,48px);line-height:1.07;letter-spacing:-.03em;font-weight:600;margin:0 0 20px;max-width:16ch;text-wrap:balance;color:#08243C">Solar support across key NSW regions.</h2>
@@ -516,7 +521,7 @@
 
   <section id="quote" style="background:#08243C;color:#fff;position:relative;overflow:hidden">
     <div style="position:absolute;bottom:-220px;left:-160px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(247,168,35,.16),transparent 65%);pointer-events:none"></div>
-    <div style="max-width:1280px;margin:0 auto;padding:clamp(64px,9vw,124px) clamp(20px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:clamp(36px,5vw,72px);align-items:start;position:relative">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(64px,9vw,124px) clamp(20px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(36px,5vw,72px);align-items:start;position:relative">
       <div>
         <p data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#F7A823;margin:0 0 18px">Book a site measure</p>
         <h2 data-reveal style="font-size:clamp(32px,4.2vw,52px);line-height:1.05;letter-spacing:-.03em;font-weight:600;margin:0 0 22px;max-width:16ch;text-wrap:balance">Start with a measured, obligation-free quotation.</h2>
@@ -559,7 +564,7 @@
   </section>
 
   <footer id="about" style="background:#061B2E;color:#8FA2B8">
-    <div style="max-width:1280px;margin:0 auto;padding:clamp(52px,7vw,88px) clamp(20px,5vw,64px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:clamp(30px,4vw,52px)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(52px,7vw,88px) clamp(20px,5vw,64px) 0;display:grid;grid-template-columns:{{ footerGrid }};gap:clamp(30px,4vw,52px)">
       <div>
         <span style="background:#fff;border-radius:10px;padding:8px 12px;display:inline-flex"><img src="uploads/pasted-1785142002664-0.png" alt="Space Solar" style="height:28px;width:auto;display:block" /></span>
         <p style="margin:20px 0 24px;font-size:14.5px;line-height:1.65;max-width:32ch">Design, installation and long-term service for residential and commercial solar across New South Wales.</p>
@@ -622,6 +627,11 @@ class Component extends DCLogic {
   componentDidMount() {
     this.onResize = () => {
       if (Math.abs(window.innerWidth - this.state.w) > 20) this.setState({ w: window.innerWidth });
+      clearTimeout(this.resizeSettle);
+      this.resizeSettle = setTimeout(() => {
+        this.setupHScroll();
+        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+      }, 220);
     };
     this.onScroll = () => {
       const h = document.querySelector('[data-header]');
@@ -641,6 +651,58 @@ class Component extends DCLogic {
     window.addEventListener('keydown', this.onKey);
     this.waitForGsap(0);
     this.fallbackTimer = setTimeout(() => this.forceReveal(), 1800);
+  }
+
+  setupHScroll(frame0) {
+    const gsap = window.gsap, ST = window.ScrollTrigger;
+    if (!gsap || !ST) return;
+    const wrap = document.querySelector('[data-hscroll]');
+    const track = document.querySelector('[data-htrack]');
+    if (!wrap || !track) return;
+    const mode = window.innerWidth < 900 ? 'native' : 'drift';
+    if (this.hMode === mode) return;
+    this.hMode = mode;
+
+    if (this.hTween) { if (this.hTween.scrollTrigger) this.hTween.scrollTrigger.kill(); this.hTween.kill(); this.hTween = null; }
+    gsap.set(track, { x: 0, clearProps: 'transform' });
+
+    if (mode === 'native') {
+      wrap.style.overflowX = 'auto';
+      wrap.style.scrollSnapType = 'x mandatory';
+      track.style.paddingRight = '20px';
+      Array.from(track.children).forEach(c => { c.style.scrollSnapAlign = 'start'; });
+      ST.refresh();
+      return;
+    }
+
+    wrap.style.overflowX = 'hidden';
+    wrap.style.scrollSnapType = 'none';
+    wrap.scrollLeft = 0;
+    track.style.paddingRight = '';
+    Array.from(track.children).forEach(c => { c.style.scrollSnapAlign = ''; });
+
+    const start = () => {
+      if (typeof frame0 === 'number' && gsap.ticker.frame <= frame0) {
+        this.hMode = 'native';
+        wrap.style.overflowX = 'auto';
+        wrap.style.scrollSnapType = 'x mandatory';
+        track.style.paddingRight = '20px';
+        Array.from(track.children).forEach(c => { c.style.scrollSnapAlign = 'start'; });
+        return;
+      }
+      const dist = () => Math.max(0, track.scrollWidth - wrap.clientWidth + 48);
+      this.hTween = gsap.fromTo(track, { x: 0 }, {
+        x: () => -dist(), ease: 'none',
+        scrollTrigger: {
+          trigger: document.querySelector('[data-hwrap]'),
+          start: 'top 78%', end: 'bottom top',
+          scrub: 0.8, invalidateOnRefresh: true
+        }
+      });
+      gsap.from('[data-panel]', { opacity: 0, y: 30, duration: 0.75, stagger: 0.09, ease: 'power3.out', scrollTrigger: { trigger: wrap, start: 'top 82%', once: true } });
+      ST.refresh();
+    };
+    typeof frame0 === 'number' ? setTimeout(start, 300) : start();
   }
 
   fmtCount(el, v) {
@@ -669,6 +731,7 @@ class Component extends DCLogic {
     window.removeEventListener('keydown', this.onKey);
     document.body.style.overflow = '';
     clearTimeout(this.fallbackTimer);
+    clearTimeout(this.resizeSettle);
     if (window.ScrollTrigger) window.ScrollTrigger.getAll().forEach(t => t.kill());
   }
 
@@ -714,31 +777,7 @@ class Component extends DCLogic {
       scrollTrigger: { trigger: '[data-cell]', start: 'top 88%', once: true }
     });
 
-    const wrap = document.querySelector('[data-hscroll]');
-    const track = document.querySelector('[data-htrack]');
-    const nativeScroll = () => {
-      wrap.style.overflowX = 'auto';
-      wrap.style.scrollSnapType = 'x mandatory';
-      track.style.paddingRight = '20px';
-      Array.from(track.children).forEach(c => { c.style.scrollSnapAlign = 'start'; });
-    };
-    if (wrap && track) {
-      if (window.innerWidth < 900) nativeScroll();
-      else setTimeout(() => {
-        if (gsap.ticker.frame <= frame0) { nativeScroll(); return; }
-        const dist = () => Math.max(0, track.scrollWidth - wrap.clientWidth + 48);
-        gsap.fromTo(track, { x: 0 }, {
-          x: () => -dist(), ease: 'none',
-          scrollTrigger: {
-            trigger: document.querySelector('[data-hwrap]'),
-            start: 'top 78%', end: 'bottom top',
-            scrub: 0.8, invalidateOnRefresh: true
-          }
-        });
-        gsap.from('[data-panel]', { opacity: 0, y: 30, duration: 0.75, stagger: 0.09, ease: 'power3.out', scrollTrigger: { trigger: wrap, start: 'top 82%', once: true } });
-        ST.refresh();
-      }, 300);
-    }
+    this.setupHScroll(frame0);
 
     const fill = document.querySelector('[data-timeline-fill]');
     if (fill) gsap.fromTo(fill, { height: '0%' }, {
@@ -958,6 +997,9 @@ class Component extends DCLogic {
     return {
       wide: this.state.w >= 1000,
       narrow: this.state.w < 1000,
+      footerGrid: this.state.w >= 1080 ? 'repeat(4,minmax(0,1fr))' : (this.state.w >= 520 ? 'repeat(2,minmax(0,1fr))' : '1fr'),
+      tiny: this.state.w < 560,
+      notTiny: this.state.w >= 560,
       menuOpen: this.state.menuOpen,
       toggleMenu: this.toggleMenu,
       goQuote: this.goQuote,
